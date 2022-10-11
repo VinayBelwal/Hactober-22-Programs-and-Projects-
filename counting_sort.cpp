@@ -1,63 +1,58 @@
-// C++ Program for counting sort
-#include <bits/stdc++.h>
-#include <string.h>
+
+#include <iostream>
 using namespace std;
-#define RANGE 255
 
-// The main function that sort
-// the given string arr[] in
-// alphabetical order
-void countSort(char arr[])
+void countSort(int array[], int size)
 {
-    // The output character array
-    // that will have sorted arr
-    char output[strlen(arr)];
 
-    // Create a count array to store count of individual
-    // characters and initialize count array as 0
-    int count[RANGE + 1], i;
-    memset(count, 0, sizeof(count));
+    int output[10];
+    int count[10];
+    int max = array[0];
 
-    // Store count of each character
-    for (i = 0; arr[i]; ++i)
-        ++count[arr[i]];
+    for (int i = 1; i < size; i++)
+    {
+        if (array[i] > max)
+            max = array[i];
+    }
 
-    // Change count[i] so that count[i] now contains actual
-    // position of this character in output array
-    for (i = 1; i <= RANGE; ++i)
+    for (int i = 0; i <= max; ++i)
+    {
+        count[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        count[array[i]]++;
+    }
+
+    for (int i = 1; i <= max; i++)
+    {
         count[i] += count[i - 1];
-
-    // Build the output character array
-    for (i = 0; arr[i]; ++i)
-    {
-        output[count[arr[i]] - 1] = arr[i];
-        --count[arr[i]];
     }
 
-    /*
-    For Stable algorithm
-    for (i = sizeof(arr)-1; i>=0; --i)
+    for (int i = size - 1; i >= 0; i--)
     {
-        output[count[arr[i]]-1] = arr[i];
-        --count[arr[i]];
+        output[count[array[i]] - 1] = array[i];
+        count[array[i]]--;
     }
 
-    For Logic : See implementation
-    */
-
-    // Copy the output array to arr, so that arr now
-    // contains sorted characters
-    for (i = 0; arr[i]; ++i)
-        arr[i] = output[i];
+    for (int i = 0; i < size; i++)
+    {
+        array[i] = output[i];
+    }
 }
 
-// Driver code
+void printArray(int array[], int size)
+{
+    for (int i = 0; i < size; i++)
+        cout << array[i] << " ";
+    cout << endl;
+}
+
 int main()
 {
-    char arr[] = "geeksforgeeks";
-
-    countSort(arr);
-
-    cout << "Sorted character array is " << arr;
-    return 0;
+    int array[] = {4, 2, 2, 8, 3, 3, 1};
+    int n = sizeof(array) / sizeof(array[0]);
+    countSort(array, n);
+    printArray(array, n);
 }
